@@ -1,0 +1,36 @@
+:root {
+  --box-shedow: 10px 10px 15px rgba(0, 0, 0, 0.2);
+  --base-border: 1px solid #57575772;
+  --accent: #a78bfa;
+  --accent2: #60a5fa;
+  --bg: #0d0f14;
+  --panel: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e6e8ee;
+  --text-dim: #9aa0ad;
+  --green: #4ade80;
+  --red: #f87171;
+}
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+html,
+body {
+  width: 300px;
+  height: 400px;
+  padding: 0;
+  margin: 0;
+  
+}
+
+body {
+  background-color: #10152a;
+}
+
+* {
+  color: aliceblue;
+  font-family: sans-serif;
+}
+
+
