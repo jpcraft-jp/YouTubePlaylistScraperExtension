@@ -26,3 +26,7 @@ dist-ssr
 # Config files
 .webextrc
 .webextrc.*
+
+
+dest
+release

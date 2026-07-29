@@ -3,7 +3,7 @@
   "{{firefox}}.manifest_version": 2,
   "browser_specific_settings": {
     "gecko": {
-      "id": "deine-extension-id@deinedomain.de",
+      "id": "devjeanpiere@gmail.com",
       "data_collection_permissions": {
         "required": ["none"]
       }
