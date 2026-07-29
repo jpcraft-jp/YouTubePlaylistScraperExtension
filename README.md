@@ -1,5 +1,7 @@
 # YouTube Playlist Scraper Extension
 
+[YouTube Playlist Scraper Extension Repo](https://github.com/jpcraft-jp/YouTubePlaylistScraperExtension)
+
 A lightweight and sleek browser extension designed to extract YouTube playlist metadata and URLs smoothly, bypassing limitations and featuring a modern Glassmorphism UI.
 
 ## Features
