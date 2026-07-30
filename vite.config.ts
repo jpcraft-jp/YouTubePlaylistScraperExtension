@@ -13,13 +13,19 @@ function generateManifest() {
   };
 }
 
+
+
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    webExtension({
-      manifest: generateManifest,
-      browser: "firefox"
-    }),
-  ],
+export default defineConfig(({ mode }) => {
+  const browser = mode === "chrome" ? "chrome" : "firefox";
+
+  return {
+    plugins: [
+      react(),
+      webExtension({
+        manifest: generateManifest,
+        browser,
+      }),
+    ],
+  };
 });
