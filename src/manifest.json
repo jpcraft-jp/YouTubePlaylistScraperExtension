@@ -34,5 +34,10 @@
       "js": ["src/content/youtube-scraper.ts"],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ],
+  "host_permissions": ["*://*.youtube.com/*"]
 }

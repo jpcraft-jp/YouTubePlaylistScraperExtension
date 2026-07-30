@@ -1,14 +1,25 @@
 import { useEffect, useState } from 'react';
 import "./Popup.css";
-import browser from 'webextension-polyfill';
+import browser, { action } from 'webextension-polyfill';
 import JsonBox from './JsonBox';
 
 export default function Popup() {
   const [playlistTitel, setPlaylistTitel] = useState("Anime");
   const [playlistData, setplaylistData] = useState<string[]>([]);
-  const [showPageError, setShowPageError] = useState<boolean>(false); // todo: implement right implementation
+  const [showPageError, setShowPageError] = useState<boolean>(false);
+  const [progressCount, setProgressCount] = useState<number | null>(null);
+  const [videoCount, setVideoCount] = useState<number>(0);
 
-  // 1. Beim Starten des Popups Daten aus dem localStorage laden
+
+  useEffect(() => {
+    async function checkPage() {
+      const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+      const url = tabs[0]?.url ?? "";
+      setShowPageError(!url.startsWith("https://www.youtube.com/playlist"));
+    }
+    checkPage();
+  }, []);
+
   useEffect(() => {
     console.log("Hello from the popup!");
 
@@ -22,24 +33,39 @@ export default function Popup() {
       }
     }
 
-    async function fetchPlaylistTitle() {
+    async function fetchPlaylistData() {
       try {
         const tabs = await browser.tabs.query({ active: true, currentWindow: true });
         if (!tabs[0]?.id) return;
 
-        const response = await browser.tabs.sendMessage(tabs[0].id, {
+        const titel_response = await browser.tabs.sendMessage(tabs[0].id, {
           action: "getPlaylistTitel"
         });
+        const vidoCount_response = await browser.tabs.sendMessage(tabs[0].id, {
+          action: "getPlaylistVideoCount"
+        })
 
-        if (response && response.message) {
-          setPlaylistTitel(response.message);
+        if (titel_response && titel_response.message) {
+          setPlaylistTitel(titel_response.message);
+        }
+        if (vidoCount_response && vidoCount_response.message) {
+          setVideoCount(vidoCount_response.message);
         }
       } catch (error) {
-        console.error("Konnte den Titel nicht abrufen:", error);
+        console.error("Konnte die Playlist data nicht abrufen:", error);
       }
     }
 
-    fetchPlaylistTitle();
+    fetchPlaylistData();
+  }, []);
+  useEffect(() => {
+    const listener = (message: any) => {
+      if (message.action === "progressUpdate") {
+        setProgressCount(message.count);
+      }
+    };
+    browser.runtime.onMessage.addListener(listener);
+    return () => browser.runtime.onMessage.removeListener(listener);
   }, []);
 
   // 2. Automatisch im localStorage speichern, sobald sich playlistData ändert
@@ -51,6 +77,7 @@ export default function Popup() {
 
   const handleGetJsonClick = async () => {
     try {
+      setplaylistData([]);
       const tabs = await browser.tabs.query({ active: true, currentWindow: true });
       if (!tabs[0]?.id) return;
 
@@ -60,7 +87,9 @@ export default function Popup() {
       });
 
       if (response && response.message) {
+        setProgressCount(videoCount);
         setplaylistData(response.message);
+        setProgressCount(null);
       }
     } catch (error) {
       console.error("Fehler beim Abrufen der Playlist-Daten:", error);
@@ -83,8 +112,25 @@ export default function Popup() {
           <h5>Get JSON</h5>
         </div>
       </div>
-      {playlistData && playlistData.length > 0 && (
+      {progressCount != null ? (
+        <div className="element_box">
+          <div className='bar-track-titel-box'>
+            <span className="label">
+              Loaded
+            </span>
+            <span className="value">
+              {((progressCount / videoCount) * 100).toFixed(1)}%
+            </span>
+          </div>
+          <div className="bar-track">
+            <div className="bar-fill thin" style={{ width: `${videoCount > 0 ? `${((progressCount / videoCount) * 100).toFixed(1)}%` : "0%"}` }}>
 
+            </div>
+          </div>
+        </div>
+      ) : null
+      }
+      {playlistData && playlistData.length > 0 && (
         <JsonBox jsonData={JSON.stringify(playlistData, null, 4)} />
       )}
     </div>
