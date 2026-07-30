@@ -38,7 +38,7 @@ if (targetBrowser === "firefox") {
 
 } else if (targetBrowser === "chrome") {
   // 2b. Chrome: .crx bauen statt web-ext, da web-ext firefox-spezifisch signiert
-  const keyPath = path.resolve("chrome-extension-key.pem");
+  const keyPath = path.resolve("release/chrome-extension-key.pem");
 
   // Privaten Key einmalig erzeugen, falls noch keiner existiert.
   // WICHTIG: Diese Datei musst du dauerhaft aufheben und NIE ins Git-Repo committen!
