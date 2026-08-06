@@ -1,5 +1,5 @@
 :root {
-  --box-shedow: 10px 10px 15px rgba(0, 0, 0, 0.2);
+  --box-shedow: ;
   --base-border: 1px solid #57575772;
   --accent: #a78bfa;
   --accent2: #60a5fa;
@@ -11,10 +11,6 @@
   --green: #4ade80;
   --red: #f87171;
 }
-
-
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 html,
 body {
   width: 300px;

@@ -1,0 +1,255 @@
+:root {
+  --bg-deep: #0b0a12;
+  --panel: rgba(255, 255, 255, 0.05);
+  --panel-border: rgba(255, 255, 255, 0.09);
+  --panel-border-hover: rgba(255, 255, 255, 0.16);
+  --text-primary: #f2f0f7;
+  --text-secondary: #a09cb3;
+  --accent: #7c5cff;
+  --accent2: #ff5ca8;
+  --radius: 16px;
+  --shadow-panel: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --code: #ffffff24;
+}
+
+
+
+body {
+  width: 100svw;
+  height: 100svh;
+  background-color: #0f1324;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.side-bar {
+  height: 70%;
+  width: 250px;
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-panel);
+  border-radius: var(--radius);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+
+}
+
+.main-content {
+  height: 70%;
+  flex-grow: 1;
+  max-width: 850px;
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-panel);
+  border-radius: var(--radius);
+}
+
+.side-bar-titel {
+  height: 45px;
+  width: 95%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-bar-breakline {
+  height: 1px;
+  width: 90%;
+  background-color: var(--border);
+  margin: 10px;
+}
+
+.side-bar-element {
+  width: 90%;
+  height: 45px;
+
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+  margin: 2px;
+
+  user-select: none;
+  cursor: pointer;
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.1);
+
+}
+
+.side-bar-element.selected {
+  background-color: rgba(91, 91, 91, 0.1);
+}
+
+
+.main-content-tokens {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+}
+
+.tokens-bottom-bar {
+  height: 45px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-bottom: 10px;
+}
+
+
+.button-box {
+  width: 250px;
+  margin-right: 10px;
+}
+
+.Button {
+  height: 42px;
+  width: 100%;
+  flex-grow: 1;
+  border-radius: 12px;
+  border: 1px solid var(--panel-border);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  background-size: 160% 100%;
+  background-position: 0% 0%;
+  transition: background-position 0.35s ease, transform 0.15s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 14px rgba(124, 92, 255, 0.25);
+}
+
+.Button h5 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #0b0a12;
+}
+
+.Button:hover {
+  background-position: 100% 0%;
+  box-shadow: 0 6px 18px rgba(255, 92, 168, 0.35);
+}
+
+.Button:active {
+  transform: scale(0.97);
+}
+
+.Button:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+
+
+.tokens-main-content {
+  width: 100%;
+  flex-grow: 1;
+  max-height: 80%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.token-list-box {
+  margin-top: 10px;
+  max-height: 85%;
+  height: 85%;
+  width: 75%;
+  flex-shrink: 1;
+  /* Für Firefox */
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  /* Macht die Scrollbar etwas schmäler und eleganter */
+  scrollbar-color: var(--accent) transparent;
+  /* Daumen-Farbe und Track-Farbe */
+  border-radius: var(--radius);
+
+  /* Für Chrome, Edge und Safari (Webkit) */
+  ::-webkit-scrollbar {
+    width: 8px;
+    /* Breite der Scrollbar */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    /* Hintergrund der Schiene */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    /* Die Farbe deines Daumens */
+    border-radius: 4px;
+    /* Schöne abgerundete Ecken */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+    /* Eventuell etwas heller/dunkler beim Hovern */
+    filter: brightness(1.2);
+  }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.token-list-item {
+  width: 95%;
+  height: 50px;
+  margin-top: 5px;
+  border-radius: var(--radius);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  align-items: center;
+}
+
+
+.token-item-text {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.Button.minified {
+  width: 42px;
+  flex-grow: 0;
+  margin-right: 5px;
+}

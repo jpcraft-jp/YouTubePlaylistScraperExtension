@@ -1,10 +1,51 @@
 import { useEffect, useState } from 'react';
-import "./Popup.css";
+import "./css/Popup.css";
 import browser, { action } from 'webextension-polyfill';
-import JsonBox from './JsonBox';
+import * as icons from 'lucide-react';
+
+
+interface JsonBoxProps {
+  jsonData: string;
+}
+
+export function JsonBox({ jsonData }: JsonBoxProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(jsonData);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Fehler beim Kopieren:", err);
+    }
+  };
+
+  return (
+    <div className='element_box json_box_container'>
+      <div className='json_box_header'>
+        <span className='json_box_label'>
+          Playlist JSON
+        </span>
+        <div 
+          onClick={handleCopy}
+          className={`copy_btn ${copied ? 'copied' : ''}`}
+        >
+          {copied ? "Copied!" : "Copy"}
+        </div>
+      </div>
+
+      {/* Die Textbox mit dem formatierten JSON-String */}
+      <div className='json_content'>
+        {jsonData}
+      </div>
+    </div>
+  );
+}
+
 
 export default function Popup() {
-  const [playlistTitel, setPlaylistTitel] = useState("Anime");
+  const [playlistTitel, setPlaylistTitel] = useState("None");
   const [playlistData, setplaylistData] = useState<string[]>([]);
   const [showPageError, setShowPageError] = useState<boolean>(false);
   const [progressCount, setProgressCount] = useState<number | null>(null);
@@ -23,15 +64,18 @@ export default function Popup() {
   useEffect(() => {
     console.log("Hello from the popup!");
 
-    const storagedPlaylistDataString = localStorage.getItem("playlistData");
-    if (storagedPlaylistDataString != null) {
+    // 1. Daten asynchron aus dem browser.storage.local laden
+    async function loadStoredData() {
       try {
-        const storagedPlaylistData = JSON.parse(storagedPlaylistDataString);
-        setplaylistData(storagedPlaylistData);
+        const result = await browser.storage.local.get("playlistData");
+        if (result.playlistData) {
+          setplaylistData(result.playlistData);
+        }
       } catch (err) {
-        console.error("Fehler beim Parsen des LocalStorage:", err);
+        console.error("Fehler beim Laden aus dem Extension Storage:", err);
       }
     }
+    loadStoredData();
 
     async function fetchPlaylistData() {
       try {
@@ -58,6 +102,7 @@ export default function Popup() {
 
     fetchPlaylistData();
   }, []);
+
   useEffect(() => {
     const listener = (message: any) => {
       if (message.action === "progressUpdate") {
@@ -68,11 +113,18 @@ export default function Popup() {
     return () => browser.runtime.onMessage.removeListener(listener);
   }, []);
 
-  // 2. Automatisch im localStorage speichern, sobald sich playlistData ändert
+  // 2. Automatisch im browser.storage.local speichern, sobald sich playlistData ändert
   useEffect(() => {
-    if (playlistData && playlistData.length > 0) {
-      localStorage.setItem("playlistData", JSON.stringify(playlistData));
+    async function saveToStorage() {
+      if (playlistData && playlistData.length > 0) {
+        try {
+          await browser.storage.local.set({ playlistData });
+        } catch (err) {
+          console.error("Fehler beim Speichern im Extension Storage:", err);
+        }
+      }
     }
+    saveToStorage();
   }, [playlistData]);
 
   const handleGetJsonClick = async () => {
@@ -96,6 +148,10 @@ export default function Popup() {
     }
   };
 
+  const handleSettingsClick = async () => {
+      await browser.runtime.openOptionsPage();
+    }
+
   return (
     <div id='main_element'>
       {showPageError ? (
@@ -104,12 +160,15 @@ export default function Popup() {
         </div>
       ) : null
       }
-      <div className='element_box'>
+      <div className='element_box row_element'>
         <h3 className='side_titel'>Get {playlistTitel} Playlist JSON</h3>
       </div>
-      <div className='element_box'>
+      <div className='element_box row_element'>
         <div className='Button' onClick={handleGetJsonClick}>
           <h5>Get JSON</h5>
+        </div>
+        <div className='settings-button' onClick={handleSettingsClick}>
+          <icons.Settings color='#FFFFFF' className='icon'/>
         </div>
       </div>
       {progressCount != null ? (
@@ -121,6 +180,7 @@ export default function Popup() {
             <span className="value">
               {((progressCount / videoCount) * 100).toFixed(1)}%
             </span>
+
           </div>
           <div className="bar-track">
             <div className="bar-fill thin" style={{ width: `${videoCount > 0 ? `${((progressCount / videoCount) * 100).toFixed(1)}%` : "0%"}` }}>
@@ -128,8 +188,7 @@ export default function Popup() {
             </div>
           </div>
         </div>
-      ) : null
-      }
+      ) : null}
       {playlistData && playlistData.length > 0 && (
         <JsonBox jsonData={JSON.stringify(playlistData, null, 4)} />
       )}

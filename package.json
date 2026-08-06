@@ -1,7 +1,7 @@
 {
   "name": "youtube_playlist_to_json",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "scripts": {
     "dev:firefox": "vite --mode firefox",
@@ -13,6 +13,7 @@
     "release": "npm run release:firefox && npm run release:chrome"
   },
   "dependencies": {
+    "lucide-react": "^1.28.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

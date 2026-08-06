@@ -1,0 +1,29 @@
+:root {
+  --box-shedow: ;
+  --base-border: 1px solid #57575772;
+  --accent: #a78bfa;
+  --accent2: #60a5fa;
+  --bg: #0d0f14;
+  --panel: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e6e8ee;
+  --text-dim: #9aa0ad;
+  --green: #4ade80;
+  --red: #f87171;
+}
+html,
+body {
+  width: 300px;
+  height: 400px;
+  padding: 0;
+  margin: 0;
+  
+}
+
+
+* {
+  color: aliceblue;
+  font-family: sans-serif;
+}
+
+

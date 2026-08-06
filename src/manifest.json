@@ -1,11 +1,13 @@
 {
   "{{chrome}}.manifest_version": 3,
-  "{{firefox}}.manifest_version": 2,
+  "{{firefox}}.manifest_version": 3 ,
   "browser_specific_settings": {
     "gecko": {
       "id": "devjeanpiere@gmail.com",
       "data_collection_permissions": {
-        "required": ["none"]
+        "required": [
+          "none"
+        ]
       }
     }
   },
@@ -19,25 +21,58 @@
   "{{chrome}}.action": {
     "default_popup": "src/popup.html"
   },
-  "{{firefox}}.browser_action": {
+  "{{firefox}}.action": {
     "default_popup": "src/popup.html"
   },
   "background": {
     "{{chrome}}.service_worker": "src/background/background.ts",
-    "{{firefox}}.scripts": ["src/background/background.ts"]
+    "{{firefox}}.scripts": [
+      "src/background/background.ts"
+    ]
   },
   "content_scripts": [
     {
       "matches": [
         "https://www.youtube.com/playlist*"
       ],
-      "js": ["src/content/youtube-scraper.ts"],
+      "js": [
+        "src/content/youtube-scraper.ts"
+      ],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/content/dashboard-api-main.ts"
+      ],
+      "run_at": "document_idle",
+      "world": "MAIN",
+      "all_frames": true
+    },
+        {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/content/dashboard-api.ts"
+      ],
+      "run_at": "document_idle",
+      "world": "ISOLATED",
+      "all_frames": true
     }
   ],
   "permissions": [
     "activeTab",
-    "tabs"
+    "tabs",
+    "storage"
   ],
-  "host_permissions": ["*://*.youtube.com/*"]
+  "host_permissions": [
+    "*://*.youtube.com/*"
+  ],
+  "options_ui": {
+    "page": "src/options.html",
+    "open_in_tab": true
+  }
 }

@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import webExtension, { readJsonFile } from "vite-plugin-web-extension";
+// removed unused imports
 
 function generateManifest() {
   const manifest = readJsonFile("src/manifest.json");
@@ -25,7 +26,10 @@ export default defineConfig(({ mode }) => {
       webExtension({
         manifest: generateManifest,
         browser,
-      }),
+      })
     ],
+    build: {
+      minify: false,
+    },
   };
 });
